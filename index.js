@@ -1,16 +1,37 @@
+const reFootnotes = /\[\^.+?\]: /igm
+
+
+function getFootnoteIndex(footnote)
+{
+  return footnote.slice(2, footnote.length-3)
+}
+
+function getMaxFootnote(content)
+{
+  var footnotes = content.match(reFootnotes)
+
+  if(footnotes === null) return 0
+
+  return parseInt(footnotes.map(getFootnoteIndex).sort()[footnotes.length-1])
+}
+
 function processPage(page)
 {
   const re = /[^!]\[[^!][^\]]+\]\(([^\)]+)\)/igm
+
+  var index = getMaxFootnote(page.content) + 1
 
   var link
   while((link = re.exec(page.content)) !== null)
   {
     var url = link[1]
 
-    console.log('url:', url)
+//    console.log('url:', url)
 
-    page.content = page.content.replace(link[0], link[0] + '[^'+link.index+']')
-                 + '[^'+link.index+']: '+url+'\n';
+    page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
+                 + '[^'+index+']: '+url+'\n';
+
+    index++
   }
 
   return page;
