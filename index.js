@@ -1,3 +1,6 @@
+var parse = require('url').parse
+
+
 const reFootnotes = /\[\^.+?\]: /igm
 
 
@@ -26,12 +29,13 @@ function processPage(page)
   {
     var url = link[1]
 
-//    console.log('url:', url)
+    if(parse(url).host)
+    {
+      page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
+                   + '[^'+index+']: '+url+'\n';
 
-    page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
-                 + '[^'+index+']: '+url+'\n';
-
-    index++
+      index++
+    }
   }
 
   return page;
