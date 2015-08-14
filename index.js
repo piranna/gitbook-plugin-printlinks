@@ -6,7 +6,7 @@ const reFootnotes = /\[\^.+?\]: /igm
 
 function getFootnoteIndex(footnote)
 {
-  return footnote.slice(2, footnote.length-3)
+  return parseInt(footnote.slice(2, footnote.length-3))
 }
 
 function getMaxFootnote(content)
@@ -15,8 +15,9 @@ function getMaxFootnote(content)
 
   if(footnotes === null) return 0
 
-  return parseInt(footnotes.map(getFootnoteIndex).sort()[footnotes.length-1])
+  return footnotes.map(getFootnoteIndex).sort()[footnotes.length-1]
 }
+
 
 function processPage(page)
 {
