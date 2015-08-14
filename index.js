@@ -21,7 +21,7 @@ function getMaxFootnote(content)
 
 function processPage(page)
 {
-  const re = /[^!]\[[^!][^\]]+\]\(([^\)]+)\)/igm
+  const re = /[^!]\[[^!].+?\]\((.+?)\)/igm
 
   var index = getMaxFootnote(page.content) + 1
 
