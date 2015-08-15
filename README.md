@@ -17,6 +17,5 @@ To do
 -----
 
 * Show alert for duplicated links
-* Detect links surrounding images
 * Sort footnotes and footnotes ids by their position on the text. Current ones
   using text ids has preference
