@@ -1,3 +1,7 @@
+var basename = require('path').basename
+var url      = require('url')
+
+
 // Already defined footnotes
 const reFootnotes = /\[\^.+?\]: /igm
 
@@ -16,6 +20,11 @@ function getMaxFootnote(content)
   return footnotes.map(getFootnoteIndex).sort()[footnotes.length-1]
 }
 
+function extractIndexes(item)
+{
+  return item.replace(/\.\s+/, '.')
+}
+
 
 function processPage(page)
 {
@@ -31,8 +40,20 @@ function processPage(page)
   {
     if(link[1] === '')
     {
+      var linkUrl = link[2]
+
+      if(!url.parse(linkUrl).host)
+      {
+        linkUrl = decodeURI(url.resolve(page.path, linkUrl))
+
+        var path = linkUrl.match(/\d+\.\s+/ig)
+        path = path.slice(0, path.length-1).map(extractIndexes).join('')
+
+        linkUrl = path+basename(linkUrl, '.html')
+      }
+
       page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
-                   + '\n[^'+index+']: '+link[2];
+                   + '\n[^'+index+']: '+linkUrl;
 
       index++
     }
