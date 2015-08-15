@@ -1,6 +1,7 @@
 var parse = require('url').parse
 
 
+// Already defined footnotes
 const reFootnotes = /\[\^.+?\]: /igm
 
 
@@ -21,7 +22,10 @@ function getMaxFootnote(content)
 
 function processPage(page)
 {
-  const re = /[^!]\[[^!].+?\]\((.+?)\)/igm
+  // Not-image links, or links not wrapping images
+  var image = '\\!\\[.*?\\]\\(.+?\\)'
+  var link = '\\[(?!.*?'+image+').+?\\]\\((.+?)\\)'
+  const re = new RegExp('[^\\!]'+link, 'igm')
 
   var index = getMaxFootnote(page.content) + 1
 
