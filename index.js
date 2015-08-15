@@ -32,7 +32,7 @@ function processPage(page)
     if(link[1] === '')
     {
       page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
-                   + '[^'+index+']: '+url+'\n';
+                   + '\n[^'+index+']: '+link[2];
 
       index++
     }
