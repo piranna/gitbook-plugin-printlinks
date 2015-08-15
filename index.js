@@ -1,6 +1,9 @@
 var basename = require('path').basename
 var url      = require('url')
 
+var intl = require('./intl.json')
+
+var language = require('../../book.json').language || 'en'
 
 // Already defined footnotes
 const reFootnotes = /\[\^.+?\]: /igm
@@ -49,7 +52,7 @@ function processPage(page)
         var path = linkUrl.match(/\d+\.\s+/ig)
         path = path.slice(0, path.length-1).map(extractIndexes).join('')
 
-        linkUrl = path+basename(linkUrl, '.html')
+        linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+'*')
       }
 
       page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
