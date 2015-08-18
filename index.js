@@ -3,8 +3,6 @@ var url      = require('url')
 
 var intl = require('./intl.json')
 
-var language = require('../../book.json').language || 'en'
-
 // Already defined footnotes
 const reFootnotes = /\[\^.+?\]: /igm
 
@@ -31,34 +29,41 @@ function extractIndexes(item)
 
 function processPage(page)
 {
-  // Not-image links, or links not wrapping images
-  var image = '\\!\\[.*?\\]\\(.+?\\)'
-  var link = '\\[(?!.*?'+image+').+?\\]\\((.+?)\\)'
-  const re = new RegExp('(\\n?(?:  )*\\d+\\.\\s*|\\!|)'+link, 'igm')
+  var options = this.config.options
 
-  var index = getMaxFootnote(page.content) + 1
-
-  var link
-  while((link = re.exec(page.content)) !== null)
+  if(options.generator === 'pdf')
   {
-    if(link[1] === '')
+    var language = options.language || 'en'
+
+    // Not-image links, or links not wrapping images
+    var image = '\\!\\[.*?\\]\\(.+?\\)'
+    var link = '\\[(?!.*?'+image+').+?\\]\\((.+?)\\)'
+    const re = new RegExp('(\\n?(?:  )*\\d+\\.\\s*|\\!|)'+link, 'igm')
+
+    var index = getMaxFootnote(page.content) + 1
+
+    var link
+    while((link = re.exec(page.content)) !== null)
     {
-      var linkUrl = link[2]
-
-      if(!url.parse(linkUrl).host)
+      if(link[1] === '')
       {
-        linkUrl = decodeURI(url.resolve(page.path, linkUrl))
+        var linkUrl = link[2]
 
-        var path = linkUrl.match(/\d+\.\s+/ig)
-        path = path.slice(0, path.length-1).map(extractIndexes).join('')
+        if(!url.parse(linkUrl).host)
+        {
+          linkUrl = decodeURI(url.resolve(page.path, linkUrl))
 
-        linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+'*')
+          var path = linkUrl.match(/\d+\.\s+/ig)
+          path = path.slice(0, path.length-1).map(extractIndexes).join('')
+
+          linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+'*')
+        }
+
+        page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
+                     + '\n[^'+index+']: '+linkUrl;
+
+        index++
       }
-
-      page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
-                   + '\n[^'+index+']: '+linkUrl;
-
-      index++
     }
   }
 
