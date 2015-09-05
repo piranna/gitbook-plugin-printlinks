@@ -49,6 +49,7 @@ function processPage(page)
       {
         var linkUrl = link[2]
 
+        // Intra-book links
         if(!url.parse(linkUrl).host)
         {
           linkUrl = decodeURI(url.resolve(page.path, linkUrl))
@@ -56,7 +57,13 @@ function processPage(page)
           var path = linkUrl.match(/\d+\.\s+/ig)
           path = path.slice(0, path.length-1).map(extractIndexes).join('')
 
-          linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+'*')
+          // Extract anchor
+          var anchor = linkUrl.split('#')
+          linkUrl = anchor.shift()
+          anchor = anchor.join('#')
+          if(anchor) anchor = ' > '+anchor
+
+          linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+anchor+'*')
         }
 
         page.content = page.content.replace(link[0], link[0] + '[^'+index+']')

@@ -1,6 +1,6 @@
 {
   "name": "gitbook-plugin-printlinks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Add visible links as footnotes for printing",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
