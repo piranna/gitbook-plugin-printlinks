@@ -1,5 +1,5 @@
-var basename = require('path').basename
-var url      = require('url')
+var path = require('path')
+var url  = require('url')
 
 var intl = require('./intl.json')
 
@@ -54,8 +54,9 @@ function processPage(page)
         {
           linkUrl = decodeURI(url.resolve(page.path, linkUrl))
 
-          var path = linkUrl.match(/\d+\.\s+/ig)
-          path = path.slice(0, path.length-1).map(extractIndexes).join('')
+          // Link path
+          var linkPath = linkUrl.match(/\d+\.\s+/ig)
+          linkPath = linkPath.slice(0, linkPath.length-1).map(extractIndexes).join('')
 
           // Extract anchor
           var anchor = linkUrl.split('#')
@@ -63,7 +64,12 @@ function processPage(page)
           anchor = anchor.join('#')
           if(anchor) anchor = ' > '+anchor
 
-          linkUrl = intl[language].replace(/__REF__/, '*'+path+basename(linkUrl, '.html')+anchor+'*')
+          // File extension
+          var extension = path.extname(linkUrl)
+          if(extension !== '.html' && extension !== '.md') extension = null
+
+          // Create footnote
+          linkUrl = intl[language].replace(/__REF__/, '*'+linkPath+path.basename(linkUrl, extension)+anchor+'*')
         }
 
         page.content = page.content.replace(link[0], link[0] + '[^'+index+']')
