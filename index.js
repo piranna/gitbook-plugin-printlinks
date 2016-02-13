@@ -66,7 +66,7 @@ function processPage(page)
 
           // File extension
           var extension = path.extname(linkUrl)
-          if(extension !== '.html' && extension !== '.md') extension = null
+          if(extension !== '.html' && extension !== '.md') extension = undefined
 
           // Create footnote
           linkUrl = intl[language].replace(/__REF__/, '*'+linkPath+path.basename(linkUrl, extension)+anchor+'*')
