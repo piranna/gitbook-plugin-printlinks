@@ -2,6 +2,9 @@ printlinks
 ==========
 Add visible links ongitbook as footnotes for printing
 
+[![NPM](https://nodei.co/npm/gitbook-plugin-printlinks.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/gitbook-plugin-printlinks)
+[![NPM](https://nodei.co/npm-dl/gitbook-plugin-printlinks.png?height=3)](https://nodei.co/npm/gitbook-plugin-printlinks)
+
 Usage
 -----
 
