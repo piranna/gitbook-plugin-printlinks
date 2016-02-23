@@ -16,7 +16,7 @@
   "engines": {
     "gitbook": "*"
   },
-  "main": "index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/piranna/gitbook-plugin-printlinks.git"
